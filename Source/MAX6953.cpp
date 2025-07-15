@@ -25,7 +25,7 @@ int MAX6953::init() {
 
 int MAX6953::init(bool EN_BLINK, bool BLINK_RATE) {
 	int ack;
-	uint8_t config_data = 0x01;
+	uint8_t config_data = CONFIG_DEFAULT;
 	Wire.beginTransmission(address);
 	Wire.write(CONFIGURATION);
 	if (EN_BLINK) {
