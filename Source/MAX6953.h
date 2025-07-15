@@ -3,10 +3,13 @@
 
 #include <stdint.h>
 
-#define MAX6953_EN_BLINK true
-#define MAX6953_NO_BLINK false
 #define INVERT_LEDS_ON true
 #define INVERT_LEDS_OFF false
+#define CONFIG_DEFAULT 0x01
+#define MAX6953_EN_BLINK true
+#define MAX6953_NO_BLINK false
+#define BLINK_FAST 1
+#define BLINK_SLOW 0
 #define DIGIT_0_P0 0x20
 #define DIGIT_0_P1 0x40
 #define INTENSITY_10 0x01
@@ -15,8 +18,6 @@
 #define EN_ALL_DIGIT 0x01
 #define CONFIGURATION 0x04
 #define MAX_INIT_SUCCESS 0
-#define BLINK_ON 0x0D
-#define BLINK_OFF 0x01
 #define CUSTOM_FONT_ADDR 0x05
 #define RAM_WRITE_ADDR_0 0x80
 #define RAM_WRITE_ADDR_1 0x85
@@ -72,16 +73,17 @@ class MAX6953 {
     uint8_t address;
   public:
     MAX6953(uint8_t MAX_I2C_ADDRESS);
-    int init(bool EN_BLINK);
+    int init();
+	int init(bool EN_BLINK, bool BLINK_RATE);
     uint16_t getBrightness();
     void setBrightness(uint8_t BRIGHTNESS);
     void updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4);
-    void updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS);
+	void updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS);
     void updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4);
-    void updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS);
+	void updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS);
     uint8_t readReg(uint8_t REGISTER);
     void setReg(uint8_t REGISTER, uint8_t DATA);
-    void setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4);
+	void setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4);
 };
 
 #endif
