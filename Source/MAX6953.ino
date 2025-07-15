@@ -14,10 +14,9 @@ void setup() {
     delay(100);
     MAX_6356.init();
   } while(ret != MAX_INIT_SUCCESS);
-  delay(100);
   textSize = sizeof(text);
 }
 
 void loop() {
-  MAX_6356.displayScrollText(text, textSize, FAST_SCROLL);
+  MAX_6356.displayScrollText(text, textSize, SCROLL_SPEED_100MS);
 }
