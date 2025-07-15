@@ -150,6 +150,10 @@ void MAX6953::setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uin
 }
 
 void MAX6953::displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, bool SCROLL_SPEED) {
+	if ((ARRAY_LENGTH == 0) || (TEXT_ARRAY[0] == NULL)) {
+    		return;
+  	}
+	
 	char newText[ARRAY_LENGTH + 8];
 	for (int n = 0; n < ARRAY_LENGTH; n++) {
 		newText[n + 4] = TEXT_ARRAY[n];
