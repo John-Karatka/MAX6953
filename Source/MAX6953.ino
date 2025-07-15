@@ -4,20 +4,20 @@
 #define address 0x50
 
 MAX6953 MAX_6356(address);
+char text[] = "Hello world!";
+int textSize;
 
 void setup() {
   Serial.begin(115200);
   int ret;
-  Serial.println("Enter main");
   do {
     delay(100);
     MAX_6356.init();
   } while(ret != MAX_INIT_SUCCESS);
-  Serial.println("Success");
-  MAX_6356.updateDisplayPane0('1', '2', '3', '4');
-  Serial.println("Updated");
+  delay(100);
+  textSize = sizeof(text);
 }
 
 void loop() {
-  delay(1000);
+  MAX_6356.displayScrollText(text, textSize, SLOW_SCROLL);
 }
