@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define EN_BLINK true
+#define NO_BLINK false
 #define INVERT_LEDS_ON true
 #define INVERT_LEDS_OFF false
 #define DIGIT_0_P0 0x20
