@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define FAST_SCROLL true
+#define SLOW_SCROLL false
 #define INVERT_LEDS_ON true
 #define INVERT_LEDS_OFF false
 #define CONFIG_DEFAULT 0x01
@@ -84,6 +86,7 @@ class MAX6953 {
     uint8_t readReg(uint8_t REGISTER);
     void setReg(uint8_t REGISTER, uint8_t DATA);
 	void setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4);
+	void displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, bool SCROLL_SPEED);
 };
 
 #endif
