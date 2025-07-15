@@ -3,10 +3,14 @@
 
 #include <stdint.h>
 
-#define FAST_SCROLL true
-#define SLOW_SCROLL false
 #define INVERT_LEDS_ON true
 #define INVERT_LEDS_OFF false
+#define SCROLL_SPEED_50 50
+#define SCROLL_SPEED_100MS 100
+#define SCROLL_SPEED_200MS 200
+#define SCROLL_SPEED_300MS 300
+#define SCROLL_SPEED_400MS 400
+#define SCROLL_SPEED_500MS 500
 #define CONFIG_DEFAULT 0x01
 #define MAX6953_EN_BLINK true
 #define MAX6953_NO_BLINK false
@@ -71,22 +75,22 @@
 #define RAM_DISPLAY_ADDR_23 0x17
 
 class MAX6953 {
-  private:
-	uint8_t address;
-  public:
-	MAX6953(uint8_t MAX_I2C_ADDRESS);
-	int init();
-	int init(bool EN_BLINK, bool BLINK_RATE);
-	uint16_t getBrightness();
-	void setBrightness(uint8_t BRIGHTNESS);
-	void updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4);
-	void updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS);
-	void updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4);
-	void updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS);
-	uint8_t readReg(uint8_t REGISTER);
-	void setReg(uint8_t REGISTER, uint8_t DATA);
-	void setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4);
-	void displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, bool SCROLL_SPEED);
+	private:
+		uint8_t address;
+	public:
+		MAX6953(uint8_t MAX_I2C_ADDRESS);
+		int init();
+		int init(bool EN_BLINK, bool BLINK_RATE);
+		uint16_t getBrightness();
+		void setBrightness(uint8_t BRIGHTNESS);
+		void updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4);
+		void updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS);
+		void updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4);
+		void updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS);
+		uint8_t readReg(uint8_t REGISTER);
+		void setReg(uint8_t REGISTER, uint8_t DATA);
+		void setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4);
+		void displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, int SCROLL_SPEED_MS);
 };
 
 #endif
