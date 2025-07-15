@@ -6,7 +6,6 @@
 MAX6953 MAX_6356(address);
 
 void setup() {
-  Wire.begin();
   Serial.begin(115200);
   int ret;
   Serial.println("Enter main");
