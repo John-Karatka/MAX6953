@@ -149,11 +149,11 @@ void MAX6953::setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uin
 	Wire.endTransmission();
 }
 
-void MAX6953::displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, bool SCROLL_SPEED) {
+void MAX6953::displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, int SCROLL_SPEED_MS) {
 	if ((ARRAY_LENGTH == 0) || (TEXT_ARRAY[0] == NULL)) {
-    		return;
-  	}
-	
+	return;
+	}
+
 	char newText[ARRAY_LENGTH + 8];
 	for (int n = 0; n < ARRAY_LENGTH; n++) {
 		newText[n + 4] = TEXT_ARRAY[n];
@@ -173,11 +173,6 @@ void MAX6953::displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, bool SCROLL_
 		for (int y = 0; y < 4; y++) {
 			updateDisplayPane0(newText[i], newText[i + 1], newText[i + 2], newText[i + 3]);
 		}
-		if (SCROLL_SPEED == FAST_SCROLL) {
-		delay(200);
-		}
-		else {
-		delay(500);
-		}
+		delay(SCROLL_SPEED_MS);
 	}
 }
