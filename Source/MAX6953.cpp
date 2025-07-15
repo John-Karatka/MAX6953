@@ -7,16 +7,34 @@ MAX6953::MAX6953(uint8_t MAX_I2C_ADDRESS) {
 	Wire.begin();
 }
 
-int MAX6953::init(bool EN_BLINK) {
+int MAX6953::init() {
 	int ack;
 	Wire.beginTransmission(address);
 	Wire.write(CONFIGURATION);
+	Wire.write(CONFIG_DEFAULT);
+	Wire.endTransmission();
+	delay(100);
+	Wire.beginTransmission(address);
+	Wire.write(INTENSITY_10);
+	Wire.write(MAX_BRIGHT); //Set brightness of digit 0 and digit 2
+	Wire.write(MAX_BRIGHT); //Set brightness of digit 1 and digit 3
+	Wire.write(EN_ALL_DIGIT);
+	ack = Wire.endTransmission();
+	return(ack);
+}
+
+int MAX6953::init(bool EN_BLINK, bool BLINK_RATE) {
+	int ack;
+	uint8_t config_data = 0x01;
+	Wire.beginTransmission(address);
+	Wire.write(CONFIGURATION);
 	if (EN_BLINK) {
-		Wire.write(BLINK_ON);
+		config_data = config_data | (1<<3);
 	}
-	else {
-		Wire.write(BLINK_OFF);
+	if (BLINK_RATE) {
+		config_data = config_data | (1<<2);
 	}
+	Wire.write(config_data);
 	Wire.endTransmission();
 	delay(100);
 	Wire.beginTransmission(address);
