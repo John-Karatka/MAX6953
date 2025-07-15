@@ -12,7 +12,7 @@ void setup() {
   Serial.println("Enter main");
   do {
     delay(100);
-    MAX_6356.init(false);
+    MAX_6356.init(NO_BLINK);
   } while(ret != MAX_INIT_SUCCESS);
   Serial.println("Success");
   MAX_6356.updateDisplayPane0('1', '2', '3', '4');
