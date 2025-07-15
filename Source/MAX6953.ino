@@ -19,5 +19,5 @@ void setup() {
 }
 
 void loop() {
-  MAX_6356.displayScrollText(text, textSize, SLOW_SCROLL);
+  MAX_6356.displayScrollText(text, textSize, FAST_SCROLL);
 }
