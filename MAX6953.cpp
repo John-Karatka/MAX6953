@@ -1,0 +1,97 @@
+#include "MAX6953.h"
+#include <stdint.h>
+#include <Wire.h>
+
+MAX6953::MAX6953(uint8_t MAX_I2C_ADDRESS) {
+	address = MAX_I2C_ADDRESS;
+	Wire.begin();
+}
+
+int MAX6953::init(bool EN_BLINK) {
+	int ack;
+	Wire.beginTransmission(address);
+	Wire.write(CONFIGURATION);
+	if (EN_BLINK) {
+		Wire.write(BLINK_ON);
+	}
+	else {
+		Wire.write(BLINK_OFF);
+	}
+	Wire.endTransmission();
+	delay(100);
+	Wire.beginTransmission(address);
+	Wire.write(INTENSITY_10);
+	Wire.write(MAX_BRIGHT); //Set brightness of digit 0 and digit 2
+	Wire.write(MAX_BRIGHT); //Set brightness of digit 1 and digit 3
+	Wire.write(EN_ALL_DIGIT);
+	ack = Wire.endTransmission();
+	return(ack);
+}
+
+uint16_t MAX6953::getBrightness() {
+	uint16_t brightness;
+	uint8_t readData[2];
+	int readLength = 2;
+	
+	Wire.beginTransmission(address);
+	Wire.write(INTENSITY_10);
+	Wire.endTransmission(false);
+	Wire.requestFrom(address, readLength);
+	while (Wire.available()) {
+		for (int i = 0; i < readLength; i++) {
+			readData[i] = Wire.read();
+		}
+	}
+	brightness = (((uint16_t)readData[1] & 0x00FF) | (((uint16_t)readData[1] << 8) & 0xFF00));
+	return(brightness);
+}
+
+void MAX6953::setBrightness(uint8_t BRIGHTNESS) {
+	Wire.beginTransmission(address);
+	Wire.write(INTENSITY_10);
+	Wire.write(BRIGHTNESS);
+	Wire.write(BRIGHTNESS);
+	Wire.endTransmission();
+}
+
+void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4) {
+	Wire.beginTransmission(address);
+	Wire.write(DIGIT_0_P0);
+	Wire.write(DIGIT_1);
+	Wire.write(DIGIT_2);
+	Wire.write(DIGIT_3);
+	Wire.write(DIGIT_4);
+	Wire.endTransmission();
+}
+
+void MAX6953::updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4) {
+	Wire.beginTransmission(address);
+	Wire.write(DIGIT_0_P1);
+	Wire.write(DIGIT_1);
+	Wire.write(DIGIT_2);
+	Wire.write(DIGIT_3);
+	Wire.write(DIGIT_4);
+	Wire.endTransmission();
+}
+
+uint8_t MAX6953::readReg(uint8_t REGISTER) {
+	int readLength = 1;
+	uint8_t readData[1];
+	Wire.beginTransmission(address);
+	Wire.write(REGISTER);
+	Wire.endTransmission(false);
+	Wire.requestFrom(address, readLength);
+	while (Wire.available()) {
+		for (int i = 0; i < readLength; i++) {
+			readData[i] = Wire.read();
+		}
+	}
+	return(readData[0]);
+}
+
+void MAX6953::setReg(uint8_t REGISTER, uint8_t DATA) {
+	Wire.beginTransmission(address);
+	Wire.write(REGISTER);
+	Wire.write(DATA);
+	Wire.endTransmission();
+}
