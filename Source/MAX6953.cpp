@@ -64,6 +64,29 @@ void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char 
 	Wire.endTransmission();
 }
 
+void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS) {
+	if (INVERT_LEDS) {
+		DIGIT_1 = DIGIT_1 | (1<<7);
+		DIGIT_2 = DIGIT_2 | (1<<7);
+		DIGIT_3 = DIGIT_3 | (1<<7);
+		DIGIT_4 = DIGIT_4 | (1<<7);
+  }
+  else {
+    DIGIT_1 = DIGIT_1 & ~(1<<7);
+		DIGIT_2 = DIGIT_2 & ~(1<<7);
+		DIGIT_3 = DIGIT_3 & ~(1<<7);
+		DIGIT_4 = DIGIT_4 & ~(1<<7);
+  }
+	
+	Wire.beginTransmission(address);
+	Wire.write(DIGIT_0_P0);
+	Wire.write(DIGIT_1);
+	Wire.write(DIGIT_2);
+	Wire.write(DIGIT_3);
+	Wire.write(DIGIT_4);
+	Wire.endTransmission();
+}
+
 void MAX6953::updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4) {
 	Wire.beginTransmission(address);
 	Wire.write(DIGIT_0_P1);
@@ -93,5 +116,17 @@ void MAX6953::setReg(uint8_t REGISTER, uint8_t DATA) {
 	Wire.beginTransmission(address);
 	Wire.write(REGISTER);
 	Wire.write(DATA);
+	Wire.endTransmission();
+}
+
+void MAX6953::setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4) {
+	Wire.beginTransmission(address);
+	Wire.write(CUSTOM_FONT_ADDR);
+	Wire.write(RAM_REG_START_ADDR);
+	Wire.write((FONT_0 & ~(1<<7)));
+	Wire.write((FONT_1 & ~(1<<7)));
+	Wire.write((FONT_2 & ~(1<<7)));
+	Wire.write((FONT_3 & ~(1<<7)));
+	Wire.write((FONT_4 & ~(1<<7)));
 	Wire.endTransmission();
 }
