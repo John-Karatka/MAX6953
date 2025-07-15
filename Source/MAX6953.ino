@@ -1,7 +1,7 @@
 #include "MAX6953.h"
 #include <Wire.h>
 
-#define address 80
+#define address 0x50
 
 MAX6953 MAX_6356(address);
 
