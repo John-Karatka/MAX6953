@@ -1,3 +1,4 @@
+#include <stddef.h>
 #ifndef MAX6953_H_
 #define MAX6953_H_
 
@@ -5,12 +6,6 @@
 
 #define INVERT_LEDS_ON true
 #define INVERT_LEDS_OFF false
-#define SCROLL_SPEED_50MS 50
-#define SCROLL_SPEED_100MS 100
-#define SCROLL_SPEED_200MS 200
-#define SCROLL_SPEED_300MS 300
-#define SCROLL_SPEED_400MS 400
-#define SCROLL_SPEED_500MS 500
 #define CONFIG_DEFAULT 0x01
 #define MAX6953_EN_BLINK true
 #define MAX6953_NO_BLINK false
@@ -74,6 +69,16 @@
 #define RAM_DISPLAY_ADDR_22 0x16
 #define RAM_DISPLAY_ADDR_23 0x17
 
+enum scroll_speed_t {
+	SCROLL_SPEED_50MS = 50,
+	SCROLL_SPEED_100MS = 100,
+	SCROLL_SPEED_150MS = 150,
+	SCROLL_SPEED_200MS = 200,
+	SCROLL_SPEED_300MS = 300,
+	SCROLL_SPEED_400MS = 400,
+	SCROLL_SPEED_500MS = 500
+};
+
 class MAX6953 {
 	private:
 		uint8_t address;
@@ -90,7 +95,7 @@ class MAX6953 {
 		uint8_t readReg(uint8_t REGISTER);
 		void setReg(uint8_t REGISTER, uint8_t DATA);
 		void setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4);
-		void displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, int SCROLL_SPEED_MS);
+		void displayScrollText(char *textArray, size_t textLength, scroll_speed_t scroll_speed);
 };
 
 #endif
