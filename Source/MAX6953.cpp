@@ -11,13 +11,13 @@ int MAX6953::init() {
 	int ack;
 	Wire.beginTransmission(address);
 	Wire.write(CONFIGURATION);
-	Wire.write(CONFIG_DEFAULT);
+	Wire.write(CONFIG_DEFAULT);	//Default config will only turn on the chip
 	Wire.endTransmission();
 	delay(100);
 	Wire.beginTransmission(address);
 	Wire.write(INTENSITY_10);
-	Wire.write(MAX_BRIGHT); //Set brightness of digit 0 and digit 2
-	Wire.write(MAX_BRIGHT); //Set brightness of digit 1 and digit 3
+	Wire.write(MAX_BRIGHT);		//Set brightness of digit 0 and digit 2
+	Wire.write(MAX_BRIGHT);		//Set brightness of digit 1 and digit 3
 	Wire.write(EN_ALL_DIGIT);
 	ack = Wire.endTransmission();
 	return(ack);
@@ -60,6 +60,7 @@ uint16_t MAX6953::getBrightness() {
 			readData[i] = Wire.read();
 		}
 	}
+	//Returns 16bit data holding brightness values for all 4 digits
 	brightness = (((uint16_t)readData[1] & 0x00FF) | (((uint16_t)readData[1] << 8) & 0xFF00));
 	return(brightness);
 }
@@ -82,22 +83,22 @@ void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char 
 	Wire.endTransmission();
 }
 
-void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS) {
+void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS) {	
 	if (INVERT_LEDS) {
 		DIGIT_1 = DIGIT_1 | (1<<7);
 		DIGIT_2 = DIGIT_2 | (1<<7);
 		DIGIT_3 = DIGIT_3 | (1<<7);
 		DIGIT_4 = DIGIT_4 | (1<<7);
-  }
-  else {
-    DIGIT_1 = DIGIT_1 & ~(1<<7);
+	}
+  	else {
+		DIGIT_1 = DIGIT_1 & ~(1<<7);
 		DIGIT_2 = DIGIT_2 & ~(1<<7);
 		DIGIT_3 = DIGIT_3 & ~(1<<7);
 		DIGIT_4 = DIGIT_4 & ~(1<<7);
-  }
+  	}
 	
 	Wire.beginTransmission(address);
-	Wire.write(DIGIT_0_P0);
+	Wire.write(DIGIT_0_P0);		//Pane0 start addresss
 	Wire.write(DIGIT_1);
 	Wire.write(DIGIT_2);
 	Wire.write(DIGIT_3);
@@ -107,7 +108,7 @@ void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char 
 
 void MAX6953::updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4) {
 	Wire.beginTransmission(address);
-	Wire.write(DIGIT_0_P1);
+	Wire.write(DIGIT_0_P1);		//Pane1 start address
 	Wire.write(DIGIT_1);
 	Wire.write(DIGIT_2);
 	Wire.write(DIGIT_3);
@@ -141,7 +142,7 @@ void MAX6953::setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uin
 	Wire.beginTransmission(address);
 	Wire.write(CUSTOM_FONT_ADDR);
 	Wire.write(RAM_REG_START_ADDR);
-	Wire.write((FONT_0 & ~(1<<7)));
+	Wire.write((FONT_0 & ~(1<<7)));	//MSB needs to be set to 0
 	Wire.write((FONT_1 & ~(1<<7)));
 	Wire.write((FONT_2 & ~(1<<7)));
 	Wire.write((FONT_3 & ~(1<<7)));
@@ -151,7 +152,7 @@ void MAX6953::setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uin
 
 void MAX6953::displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, int SCROLL_SPEED_MS) {
 	if ((ARRAY_LENGTH == 0) || (TEXT_ARRAY[0] == NULL)) {
-	return;
+		return;
 	}
 
 	char newText[ARRAY_LENGTH + 8];
@@ -159,7 +160,7 @@ void MAX6953::displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, int SCROLL_S
 		newText[n + 4] = TEXT_ARRAY[n];
 	}
 	
-	//Add space characters to beginning and end
+	//Add space characters to beginning and end for smooth scrolling
 	newText[0] = ' ';
 	newText[1] = ' ';
 	newText[2] = ' ';
@@ -168,7 +169,8 @@ void MAX6953::displayScrollText(char *TEXT_ARRAY, int ARRAY_LENGTH, int SCROLL_S
 	newText[ARRAY_LENGTH + 4] = ' ';
 	newText[ARRAY_LENGTH + 5] = ' ';
 	newText[ARRAY_LENGTH + 6] = ' ';
-	
+
+	//Update display 4 characters at a time
 	for (int i = 0; i < ARRAY_LENGTH + 4; i++) {
 		for (int y = 0; y < 4; y++) {
 			updateDisplayPane0(newText[i], newText[i + 1], newText[i + 2], newText[i + 3]);
