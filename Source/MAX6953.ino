@@ -1,5 +1,4 @@
 #include "MAX6953.h"
-#include <Wire.h>
 
 #define address 0x50
 
