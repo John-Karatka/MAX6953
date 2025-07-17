@@ -23,15 +23,15 @@ int MAX6953::init() {
 	return(ack);
 }
 
-int MAX6953::init(bool EN_BLINK, bool BLINK_RATE) {
+int MAX6953::init(blinkSetting_t blinkSetting, blinkRate_t blinkRate) {
 	int ack;
 	uint8_t config_data = CONFIG_DEFAULT;
 	Wire.beginTransmission(address);
 	Wire.write(CONFIGURATION);
-	if (EN_BLINK) {
+	if (blinkSetting == BLINK_ON) {
 		config_data = config_data | (1<<3);
 	}
-	if (BLINK_RATE) {
+	if (blinkRate == BLINK_FAST) {
 		config_data = config_data | (1<<2);
 	}
 	Wire.write(config_data);
@@ -64,62 +64,85 @@ uint16_t MAX6953::getBrightness() {
 	return(brightness);
 }
 
-void MAX6953::setBrightness(uint8_t BRIGHTNESS) {
+void MAX6953::setBrightness(uint8_t brightness) {
 	Wire.beginTransmission(address);
 	Wire.write(INTENSITY_10);
-	Wire.write(BRIGHTNESS);
-	Wire.write(BRIGHTNESS);
+	Wire.write(brightness);
+	Wire.write(brightness);
 	Wire.endTransmission();
 }
 
-void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4) {
+void MAX6953::updateDisplayPane0(char digit_0, char digit_1, char digit_2, char digit_3) {
 	Wire.beginTransmission(address);
 	Wire.write(DIGIT_0_P0);
-	Wire.write(DIGIT_1);
-	Wire.write(DIGIT_2);
-	Wire.write(DIGIT_3);
-	Wire.write(DIGIT_4);
+	Wire.write(digit_0);
+	Wire.write(digit_1);
+	Wire.write(digit_2);
+	Wire.write(digit_3);
 	Wire.endTransmission();
 }
 
-void MAX6953::updateDisplayPane0(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4, bool INVERT_LEDS) {
-	if (INVERT_LEDS) {
-		DIGIT_1 = DIGIT_1 | (1<<7);
-		DIGIT_2 = DIGIT_2 | (1<<7);
-		DIGIT_3 = DIGIT_3 | (1<<7);
-		DIGIT_4 = DIGIT_4 | (1<<7);
+void MAX6953::updateDisplayPane0(char digit_0, char digit_1, char digit_2, char digit_3, bool invertLeds) {
+	if (invertLeds) {
+		digit_0 = digit_0 | (1<<7);
+		digit_1 = digit_1 | (1<<7);
+		digit_2 = digit_2 | (1<<7);
+		digit_3 = digit_3 | (1<<7);
   	}
   	else {
-    		DIGIT_1 = DIGIT_1 & ~(1<<7);
-		DIGIT_2 = DIGIT_2 & ~(1<<7);
-		DIGIT_3 = DIGIT_3 & ~(1<<7);
-		DIGIT_4 = DIGIT_4 & ~(1<<7);
-	}
+    		digit_0 = digit_0 & ~(1<<7);
+		digit_1 = digit_1 & ~(1<<7);
+		digit_2 = digit_2 & ~(1<<7);
+		digit_3 = digit_3 & ~(1<<7);
+  	}
 	
 	Wire.beginTransmission(address);
 	Wire.write(DIGIT_0_P0);
-	Wire.write(DIGIT_1);
-	Wire.write(DIGIT_2);
-	Wire.write(DIGIT_3);
-	Wire.write(DIGIT_4);
+	Wire.write(digit_0);
+	Wire.write(digit_1);
+	Wire.write(digit_2);
+	Wire.write(digit_3);
 	Wire.endTransmission();
 }
 
-void MAX6953::updateDisplayPane1(char DIGIT_1, char DIGIT_2, char DIGIT_3, char DIGIT_4) {
+void MAX6953::updateDisplayPane1(char digit_0, char digit_1, char digit_2, char digit_3) {
 	Wire.beginTransmission(address);
 	Wire.write(DIGIT_0_P1);
-	Wire.write(DIGIT_1);
-	Wire.write(DIGIT_2);
-	Wire.write(DIGIT_3);
-	Wire.write(DIGIT_4);
+	Wire.write(digit_0);
+	Wire.write(digit_1);
+	Wire.write(digit_2);
+	Wire.write(digit_3);
 	Wire.endTransmission();
 }
 
-uint8_t MAX6953::readReg(uint8_t REGISTER) {
+void MAX6953::updateDisplayPane1(char digit_0, char digit_1, char digit_2, char digit_3, bool invertLeds) {
+	if (invertLeds) {
+		digit_0 = digit_0 | (1<<7);
+		digit_1 = digit_1 | (1<<7);
+		digit_2 = digit_2 | (1<<7);
+		digit_3 = digit_3 | (1<<7);
+	}
+	else {
+		digit_0 = digit_0 & ~(1<<7);
+		digit_1 = digit_1 & ~(1<<7);
+		digit_2 = digit_2 & ~(1<<7);
+		digit_3 = digit_3 & ~(1<<7);
+	}
+	
+	Wire.beginTransmission(address);
+	Wire.write(DIGIT_0_P1);
+	Wire.write(digit_0);
+	Wire.write(digit_1);
+	Wire.write(digit_2);
+	Wire.write(digit_3);
+	Wire.endTransmission();
+}
+
+uint8_t MAX6953::readReg(uint8_t reg) {
 	int readLength = 1;
 	uint8_t readData[1];
 	Wire.beginTransmission(address);
-	Wire.write(REGISTER);
+	Wire.write(reg);
 	Wire.endTransmission(false);
 	Wire.requestFrom(address, readLength);
 	while (Wire.available()) {
@@ -130,22 +153,22 @@ uint8_t MAX6953::readReg(uint8_t REGISTER) {
 	return(readData[0]);
 }
 
-void MAX6953::setReg(uint8_t REGISTER, uint8_t DATA) {
+void MAX6953::setReg(uint8_t reg, uint8_t data) {
 	Wire.beginTransmission(address);
-	Wire.write(REGISTER);
-	Wire.write(DATA);
+	Wire.write(reg);
+	Wire.write(data);
 	Wire.endTransmission();
 }
 
-void MAX6953::setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4) {
+void MAX6953::setCustomCharacter(ramWriteAddr_t ramRegCustAddr, uint8_t fontColumn_1, uint8_t fontColumn_2, uint8_t fontColumn_3, uint8_t fontColumn_4, uint8_t fontColumn_5) {
 	Wire.beginTransmission(address);
 	Wire.write(CUSTOM_FONT_ADDR);
-	Wire.write(RAM_REG_START_ADDR);
-	Wire.write((FONT_0 & ~(1<<7)));
-	Wire.write((FONT_1 & ~(1<<7)));
-	Wire.write((FONT_2 & ~(1<<7)));
-	Wire.write((FONT_3 & ~(1<<7)));
-	Wire.write((FONT_4 & ~(1<<7)));
+	Wire.write(ramRegCustAddr);
+	Wire.write((fontColumn_1 & ~(1<<7)));
+	Wire.write((fontColumn_2 & ~(1<<7)));
+	Wire.write((fontColumn_3 & ~(1<<7)));
+	Wire.write((fontColumn_4 & ~(1<<7)));
+	Wire.write((fontColumn_5 & ~(1<<7)));
 	Wire.endTransmission();
 }
 
@@ -158,7 +181,7 @@ void MAX6953::displayScrollText(const char *textArray, size_t textLength, scroll
 	for (int n = 0; n < textLength; n++) {
 		newText[n + 4] = textArray[n];
 	}
-	
+
 	//Add space characters to beginning and end
 	newText[0] = ' ';
 	newText[1] = ' ';
