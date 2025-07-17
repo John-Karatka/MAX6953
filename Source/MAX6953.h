@@ -1,8 +1,8 @@
-#include <stddef.h>
 #ifndef MAX6953_H_
 #define MAX6953_H_
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define INVERT_LEDS_ON true
 #define INVERT_LEDS_OFF false
