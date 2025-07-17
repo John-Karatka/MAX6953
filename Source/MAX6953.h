@@ -95,7 +95,7 @@ class MAX6953 {
 		uint8_t readReg(uint8_t REGISTER);
 		void setReg(uint8_t REGISTER, uint8_t DATA);
 		void setCustomCharacter(uint8_t RAM_REG_START_ADDR, uint8_t FONT_0, uint8_t FONT_1, uint8_t FONT_2, uint8_t FONT_3, uint8_t FONT_4);
-		void displayScrollText(char *textArray, size_t textLength, scroll_speed_t scroll_speed);
+		void displayScrollText(const char *textArray, size_t textLength, scroll_speed_t scroll_speed);
 };
 
 #endif
