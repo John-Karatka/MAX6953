@@ -88,13 +88,13 @@ void MAX6953::updateDisplayPane0(char digit_0, char digit_1, char digit_2, char 
 		digit_1 = digit_1 | (1<<7);
 		digit_2 = digit_2 | (1<<7);
 		digit_3 = digit_3 | (1<<7);
-  	}
-  	else {
-    		digit_0 = digit_0 & ~(1<<7);
+  }
+  else {
+    digit_0 = digit_0 & ~(1<<7);
 		digit_1 = digit_1 & ~(1<<7);
 		digit_2 = digit_2 & ~(1<<7);
 		digit_3 = digit_3 & ~(1<<7);
-  	}
+  }
 	
 	Wire.beginTransmission(address);
 	Wire.write(DIGIT_0_P0);
@@ -116,18 +116,18 @@ void MAX6953::updateDisplayPane1(char digit_0, char digit_1, char digit_2, char 
 }
 
 void MAX6953::updateDisplayPane1(char digit_0, char digit_1, char digit_2, char digit_3, bool invertLeds) {
-	if (invertLeds) {
+  if (invertLeds) {
 		digit_0 = digit_0 | (1<<7);
 		digit_1 = digit_1 | (1<<7);
 		digit_2 = digit_2 | (1<<7);
 		digit_3 = digit_3 | (1<<7);
-	}
-	else {
-		digit_0 = digit_0 & ~(1<<7);
+  }
+  else {
+    digit_0 = digit_0 & ~(1<<7);
 		digit_1 = digit_1 & ~(1<<7);
 		digit_2 = digit_2 & ~(1<<7);
 		digit_3 = digit_3 & ~(1<<7);
-	}
+  }
 	
 	Wire.beginTransmission(address);
 	Wire.write(DIGIT_0_P1);
@@ -173,9 +173,9 @@ void MAX6953::setCustomCharacter(ramWriteAddr_t ramRegCustAddr, uint8_t fontColu
 }
 
 void MAX6953::displayScrollText(const char *textArray, size_t textLength, scroll_speed_t scrollSpeed) {
-	if ((textLength == 0) || (textArray == NULL)) {
-		return;
-	}
+  if ((textLength == 0) || (textArray == NULL)) {
+    return;
+  }
 
 	char newText[textLength + 8];
 	for (int n = 0; n < textLength; n++) {

@@ -1,0 +1,9 @@
+MAX6953	KEYWORD1
+init	KEYWORD2
+getBrightness	KEYWORD2
+updateDisplayPane0	KEYWORD3
+updateDisplayPane1	KEYWORD4
+readReg	KEYWORD5
+setReg	KEYWORD6
+setCustomCharacter	KEYWORD7
+displayScrollText	KEYWORD8

@@ -1,9 +1,10 @@
 # MAX6953
-This is a project for the MAX6953 Dot Matrix LED Display Driver.
-Included here is:
-1) Datasheet
-2) Schematic
-3) PCB Disign
-4) Case STL
-5) Arduino Code
-6) Example Video
+
+Arduino library for MAX6953 dot-maxtrix display driver chip. This library is able to read and write data to the MAX6953 chip
+over the I2C wired connection.
+
+Make sure you use pull-up resistors on the I2C line when needed.
+
+See example code for reference.
+
+john.karatka@gmail.com
