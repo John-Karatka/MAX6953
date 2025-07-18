@@ -1,4 +1,4 @@
-#include "MAX6953.h"
+#include <MAX6953.h>
 
 #define address 0x50
 
