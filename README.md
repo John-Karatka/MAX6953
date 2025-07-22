@@ -1,4 +1,5 @@
 [![Arduino CI](https://github.com/John-Karatka/MAX6953/workflows/Arduino_CI/badge.svg)](https://github.com/marketplace/actions/Arduino_CI)
+[![GitHub issues](https://img.shields.io/github/issues/John-Karatka/MAX6953.svg)](https://github.com/John-Karatka/MAX6953/issues)
 
 # MAX6953
 
