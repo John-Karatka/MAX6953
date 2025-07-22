@@ -1,6 +1,7 @@
 #include "MAX6953.h"
 #include <stdint.h>
 #include <Wire.h>
+#include <Arduino.h>
 
 MAX6953::MAX6953(uint8_t MAX_I2C_ADDRESS) {
 	address = MAX_I2C_ADDRESS;
