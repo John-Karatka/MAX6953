@@ -101,13 +101,13 @@ class MAX6953 {
     uint16_t getBrightness();
     void setBrightness(uint8_t brightness);
     void updateDisplayPane0(char digit_0, char digit_1, char digit_2, char digit_3);
-	  void updateDisplayPane0(char digit_0, char digit_1, char digit_2, char digit_3, bool invertLeds);
+    void updateDisplayPane0(char digit_0, char digit_1, char digit_2, char digit_3, bool invertLeds);
     void updateDisplayPane1(char digit_0, char digit_1, char digit_2, char digit_3);
-	  void updateDisplayPane1(char digit_0, char digit_1, char digit_2, char digit_3, bool invertLeds);
+    void updateDisplayPane1(char digit_0, char digit_1, char digit_2, char digit_3, bool invertLeds);
     uint8_t readReg(uint8_t reg);
     void setReg(uint8_t reg, uint8_t data);
-	  void setCustomCharacter(ramWriteAddr_t ramRegCustAddr, uint8_t fontColumn_1, uint8_t fontColumn_2, uint8_t fontColumn_3, uint8_t fontColumn_4, uint8_t fontColumn_5);
-	  void displayScrollText(const char *textArray, size_t textLength, scroll_speed_t scroll_speed);
+    void setCustomCharacter(ramWriteAddr_t ramRegCustAddr, uint8_t fontColumn_1, uint8_t fontColumn_2, uint8_t fontColumn_3, uint8_t fontColumn_4, uint8_t fontColumn_5);
+    void displayScrollText(const char *textArray, size_t textLength, scroll_speed_t scroll_speed);
 };
 
 #endif
